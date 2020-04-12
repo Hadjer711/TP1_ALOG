@@ -1,4 +1,6 @@
-package Models;
+package Models.GestionPatient;
+
+import Models.GestionRdv.Rdv;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,6 @@
-package Models;
+package Models.GestionRdv;
+
+import Models.GestionPatient.Patient;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
