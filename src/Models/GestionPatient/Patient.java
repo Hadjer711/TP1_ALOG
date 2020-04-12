@@ -5,6 +5,7 @@ import Models.GestionRdv.Rdv;
 import java.util.ArrayList;
 
 public class Patient {
+    private int patientId;
     private String nom;
     private String prenom;
     private String adresse;
@@ -13,7 +14,11 @@ public class Patient {
     private String infoMedicale;
     private ArrayList<Rdv> rdvs;
 
-    public Patient(String nom, String prenom, String adresse, String telephone, String mail, String infoMedicale) {
+    public Patient(){
+
+    }
+    public Patient(int patientId, String nom, String prenom, String adresse, String telephone, String mail, String infoMedicale) {
+        this.patientId = patientId;
         this.nom = nom;
         this.prenom = prenom;
         this.adresse = adresse;
@@ -79,5 +84,13 @@ public class Patient {
     }
     public void addRdv(Rdv rdv) {
         this.rdvs.add(rdv);
+    }
+
+    public int getPatientId() {
+        return patientId;
+    }
+
+    public void setPatientId(int patientId) {
+        this.patientId = patientId;
     }
 }
