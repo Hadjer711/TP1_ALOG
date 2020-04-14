@@ -4,7 +4,7 @@
     <data-source source="LOCAL" name="@localhost" uuid="2ab80b44-074c-46e1-88a9-d47f0233b5f4">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
-      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:mysql://localhost:3306/rdv</jdbc-url>
       <driver-properties>
         <property name="serverTimezone" value="UTC" />
