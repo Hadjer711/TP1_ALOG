@@ -1,27 +1,23 @@
 package Models.GestionRdv;
 
-import Models.GestionPatient.Patient;
-
 import java.sql.Date;
 import java.sql.Time;
-import java.util.ArrayList;
 
 public class Rdv {
     private int rdvId;
     private Date date;
     private Time heure;
     private String objet;
-    private Patient patient;
-    private static ArrayList<Rdv> rdvs;
+    private int patientId;
 
     public Rdv(){
 
     }
-    public Rdv( Date date, Time heure, String objet, Patient patient) {
+    public Rdv( Date date, Time heure, String objet, int patientId) {
         this.date = date;
         this.heure = heure;
         this.objet = objet;
-        this.patient = patient;
+        this.patientId= patientId;
     }
 
     public Date getDate() {
@@ -48,21 +44,12 @@ public class Rdv {
         this.objet = objet;
     }
 
-    public Patient getPatient() {
-        return patient;
+    public int getPatientId() {
+        return patientId;
     }
 
-    public void setPatient(Patient patient) {
-        this.patient = patient;
-    }
-    public static ArrayList<Rdv> listRdvs(Date jour) {
-        ArrayList<Rdv> result = new ArrayList<Rdv>();
-        for (Rdv r:rdvs) {
-            if (r.date==jour){
-                result.add(r);
-            }
-        }
-        return result;
+    public void setPatientId(int patientId) {
+        this.patientId = patientId;
     }
 
     public int getRdvId() {

@@ -12,7 +12,6 @@ public class Patient {
     private String telephone;
     private String mail;
     private String infoMedicale;
-    private ArrayList<Rdv> rdvs;
 
     public Patient(){
 
@@ -72,17 +71,6 @@ public class Patient {
 
     public void setInfoMedicale(String infoMedicale) {
         this.infoMedicale = infoMedicale;
-    }
-
-    public ArrayList<Rdv> getRdvs() {
-        return rdvs;
-    }
-
-    public void setRdvs(ArrayList<Rdv> rdvs) {
-        this.rdvs = rdvs;
-    }
-    public void addRdv(Rdv rdv) {
-        this.rdvs.add(rdv);
     }
 
     public int getPatientId() {

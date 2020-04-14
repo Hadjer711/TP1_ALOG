@@ -19,9 +19,9 @@ public class RdvDaoImpl implements RdvDao {
     private final String SQL_DELETE_RDV = "DELETE FROM rdv WHERE id=?";
 
     @Override
-    public void createRdv(Rdv rdv) {
+    public void createRdv(Rdv rdv,Patient patient) {
         try (PreparedStatement pstmt = conn.prepareStatement(SQL_CREATE_RDV, Statement.RETURN_GENERATED_KEYS)) {
-            pstmt.setInt(1, rdv.getPatient().getPatientId());
+            pstmt.setInt(1, patient.getPatientId());
             pstmt.setDate(2, rdv.getDate());
             pstmt.setTime(3, rdv.getHeure());
             pstmt.setString(4, rdv.getObjet());
@@ -44,8 +44,7 @@ public class RdvDaoImpl implements RdvDao {
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
                     rdv.setRdvId(rs.getInt(1));
-                    PatientDaoImpl patientDaoImpl = new PatientDaoImpl();
-                    rdv.setPatient(patientDaoImpl.getPatientById(rs.getInt(2)));
+                    rdv.setPatientId(rs.getInt(2));
                     rdv.setDate(rs.getDate(3));
                     rdv.setHeure(rs.getTime(5));
                     rdv.setObjet(rs.getString(4));
@@ -59,15 +58,15 @@ public class RdvDaoImpl implements RdvDao {
     }
 
     @Override
-    public ArrayList<Rdv> getAllRdvsPatient(Patient patient) {
+    public ArrayList<Rdv> getAllRdvsPatient(int patientId) {
         ArrayList<Rdv> allRdvsPatient = new ArrayList();
         try (PreparedStatement pstmt = conn.prepareStatement(SQL_GET_ALL_RDVS_PATIENT)) {
-            pstmt.setInt(1, patient.getPatientId());
+            pstmt.setInt(1, patientId);
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
                     Rdv rdv = new Rdv();
                     rdv.setRdvId(rs.getInt(1));
-                    rdv.setPatient(patient);
+                    rdv.setPatientId(patientId);
                     rdv.setDate(rs.getDate(3));
                     rdv.setHeure(rs.getTime(5));
                     rdv.setObjet(rs.getString(4));
@@ -89,8 +88,7 @@ public class RdvDaoImpl implements RdvDao {
                 while (rs.next()) {
                     Rdv rdv = new Rdv();
                     rdv.setRdvId(rs.getInt(1));
-                    PatientDaoImpl patientDaoImpl = new PatientDaoImpl();
-                    rdv.setPatient(patientDaoImpl.getPatientById(rs.getInt(2)));
+                    rdv.setPatientId(rs.getInt(2));
                     rdv.setDate(rs.getDate(3));
                     rdv.setHeure(rs.getTime(5));
                     rdv.setObjet(rs.getString(4));
@@ -106,7 +104,7 @@ public class RdvDaoImpl implements RdvDao {
     @Override
     public void updateRdv(Rdv rdv) {
         try (PreparedStatement pstmt = conn.prepareStatement(SQL_UPDATE_RDV)) {
-            pstmt.setInt(1, rdv.getPatient().getPatientId());
+            pstmt.setInt(1, rdv.getPatientId());
             pstmt.setDate(2, rdv.getDate());
             pstmt.setTime(3, rdv.getHeure());
             pstmt.setString(4, rdv.getObjet());
@@ -115,6 +113,14 @@ public class RdvDaoImpl implements RdvDao {
         } catch (SQLException ex) {
             Logger.getLogger(RdvDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @Override
+    public void changeDate(int rdvId, Date jour, Time heure) {
+        Rdv rdv = getRdvById(rdvId);
+        rdv.setDate(jour);
+        rdv.setHeure(heure);
+        updateRdv(rdv);
     }
 
     @Override
