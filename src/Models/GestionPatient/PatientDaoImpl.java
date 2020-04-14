@@ -15,6 +15,7 @@ public class PatientDaoImpl implements PatientDao {
     private final String SQL_CREATE_PATIENT = "INSERT INTO patient (nom, prenom, adresse, telephone, mail, infoMedicale) VALUES (?, ?, ?, ?, ?, ?)";
     private final String SQL_GET_PATIENT_BY_ID = "SELECT * FROM patient WHERE id=?";
     private final String SQL_GET_ALL_PATIENTS = "SELECT * FROM patient";
+    private final String SQL_GET_PATIENTS_BY_NAME = "SELECT * FROM patient WHERE nom=? AND prenom=?";
     private final String SQL_UPDATE_PATIENT = "UPDATE patient SET nom=?, prenom=?, adresse=?, telephone=?, mail=?, infoMedicale=? WHERE id=?";
     private final String SQL_DELETE_PATIENT = "DELETE FROM patient WHERE id=?";
 
@@ -75,6 +76,31 @@ public class PatientDaoImpl implements PatientDao {
                 patient.setMail(rs.getString(6));
                 patient.setInfoMedicale(rs.getString(7));
                 allPatients.add(patient);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PatientDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return allPatients;
+    }
+
+    @Override
+    public ArrayList<Patient> getPatientsByName(String nom, String prenom) {
+        ArrayList<Patient> allPatients = new ArrayList();
+        try (PreparedStatement pstmt = conn.prepareStatement(SQL_GET_PATIENTS_BY_NAME)) {
+            pstmt.setString(1, nom);
+            pstmt.setString(2,prenom);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    Patient patient = new Patient();
+                    patient.setPatientId(rs.getInt(1));
+                    patient.setNom(rs.getString(2));
+                    patient.setPrenom(rs.getString(3));
+                    patient.setAdresse(rs.getString(4));
+                    patient.setTelephone(rs.getString(5));
+                    patient.setMail(rs.getString(6));
+                    patient.setInfoMedicale(rs.getString(7));
+                    allPatients.add(patient);
+                }
             }
         } catch (SQLException ex) {
             Logger.getLogger(PatientDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
