@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="main" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.ListeRdvController">
+   <children>
+
+      <VBox prefHeight="650.0" prefWidth="220.0" style="-fx-background-color: #16a085;">
+         <children>
+            <ImageView fitHeight="121.0" fitWidth="222.0" layoutX="10.0" layoutY="-75.0" pickOnBounds="true" preserveRatio="true" />
+            <Separator prefWidth="200.0" />
+            <JFXButton id="AjoutRdvBtn" buttonType="RAISED" mnemonicParsing="false" prefHeight="48.0" prefWidth="222.0" text="Ajouter un RDV" textFill="WHITE">
+               <font>
+                  <Font name="Candara Light" size="22.0" />
+               </font></JFXButton>
+            <JFXButton id="PatientsBtn" buttonType="RAISED" mnemonicParsing="false" prefHeight="48.0" prefWidth="222.0" text="Mes Patients" textFill="WHITE">
+               <font>
+                  <Font name="Candara Light" size="22.0" />
+               </font></JFXButton>
+         </children></VBox>
+      <TableView id="listeRdvTable" layoutX="240.0" layoutY="218.0" prefHeight="393.0" prefWidth="750.0">
+        <columns>
+           <TableColumn fx:id="id_col" prefWidth="50.0" text="Id" />
+           <TableColumn fx:id="patient_col" prefWidth="130.0" text="Patient" />
+          <TableColumn fx:id="date_col" prefWidth="130.0" text="Date" />
+          <TableColumn fx:id="heure_col" prefWidth="130.0" text="Heure" />
+            <TableColumn fx:id="objet_col" prefWidth="180.0" text="Objet" />
+           <TableColumn fx:id="update_col" prefWidth="130.0" text="Modifier" />
+            <TableColumn fx:id="delete_col" prefWidth="130.0" text="Supprimer" />
+        </columns>
+      </TableView>
+      <JFXDatePicker layoutX="240.0" layoutY="156.0" />
+      <JFXTimePicker layoutX="442.0" layoutY="149.0" prefHeight="35.0" prefWidth="116.0" />
+
+
+   </children>
+</AnchorPane>
