@@ -10,10 +10,12 @@ import java.util.logging.Logger;
 public class ConnectToDatabase {
 
     public static Connection createConnection() {
-        String dbUrl = "jdbc:derby://localhost:3306/rdv";
+        String DB_URL = "jdbc:mysql://localhost:3306/rdv";
+        String DB_USER = "root";
+        String DB_PASS = "";
         Connection conn = null;
         try {
-            conn = DriverManager.getConnection(dbUrl);
+            conn = DriverManager.getConnection(DB_URL,DB_USER,DB_PASS);
         } catch (SQLException ex) {
             Logger.getLogger(ConnectToDatabase.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -12,13 +12,11 @@ public class Patient {
     private String telephone;
     private String mail;
     private String infoMedicale;
-    private ArrayList<Rdv> rdvs;
 
     public Patient(){
 
     }
-    public Patient(int patientId, String nom, String prenom, String adresse, String telephone, String mail, String infoMedicale) {
-        this.patientId = patientId;
+    public Patient(String nom, String prenom, String adresse, String telephone, String mail, String infoMedicale) {
         this.nom = nom;
         this.prenom = prenom;
         this.adresse = adresse;
@@ -73,17 +71,6 @@ public class Patient {
 
     public void setInfoMedicale(String infoMedicale) {
         this.infoMedicale = infoMedicale;
-    }
-
-    public ArrayList<Rdv> getRdvs() {
-        return rdvs;
-    }
-
-    public void setRdvs(ArrayList<Rdv> rdvs) {
-        this.rdvs = rdvs;
-    }
-    public void addRdv(Rdv rdv) {
-        this.rdvs.add(rdv);
     }
 
     public int getPatientId() {

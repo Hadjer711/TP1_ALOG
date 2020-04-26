@@ -1,38 +1,38 @@
 package Models.GestionRdv;
 
-import Models.GestionPatient.Patient;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.ArrayList;
+import java.sql.Date;
+import java.sql.Time;
 
 public class Rdv {
-    private LocalDate date;
-    private LocalTime heure;
+    private int rdvId;
+    private Date date;
+    private Time heure;
     private String objet;
-    private Patient patient;
-    private static ArrayList<Rdv> rdvs;
+    private int patientId;
 
-    public Rdv(LocalDate date, LocalTime heure, String objet, Patient patient) {
+    public Rdv(){
+
+    }
+    public Rdv( Date date, Time heure, String objet, int patientId) {
         this.date = date;
         this.heure = heure;
         this.objet = objet;
-        this.patient = patient;
+        this.patientId= patientId;
     }
 
-    public LocalDate getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
-    public LocalTime getHeure() {
+    public Time getHeure() {
         return heure;
     }
 
-    public void setHeure(LocalTime heure) {
+    public void setHeure(Time heure) {
         this.heure = heure;
     }
 
@@ -44,20 +44,19 @@ public class Rdv {
         this.objet = objet;
     }
 
-    public Patient getPatient() {
-        return patient;
+    public int getPatientId() {
+        return patientId;
     }
 
-    public void setPatient(Patient patient) {
-        this.patient = patient;
+    public void setPatientId(int patientId) {
+        this.patientId = patientId;
     }
-    public static ArrayList<Rdv> listRdvs(LocalDate jour) {
-        ArrayList<Rdv> result = new ArrayList<Rdv>();
-        for (Rdv r:rdvs) {
-            if (r.date==jour){
-                result.add(r);
-            }
-        }
-        return result;
+
+    public int getRdvId() {
+        return rdvId;
+    }
+
+    public void setRdvId(int rdvId) {
+        this.rdvId = rdvId;
     }
 }
