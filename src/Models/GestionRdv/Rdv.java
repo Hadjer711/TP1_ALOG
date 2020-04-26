@@ -7,17 +7,36 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 
 public class Rdv {
+    private int id;
     private LocalDate date;
     private LocalTime heure;
     private String objet;
     private Patient patient;
-    private static ArrayList<Rdv> rdvs;
 
-    public Rdv(LocalDate date, LocalTime heure, String objet, Patient patient) {
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Rdv(int id, LocalDate date, LocalTime heure, String objet, Patient patient) {
+        this.id = id;
         this.date = date;
         this.heure = heure;
         this.objet = objet;
         this.patient = patient;
+    }
+
+
+    private static ArrayList<Rdv> rdvs;
+
+    public Rdv(LocalDate date, LocalTime heure, String objet) {
+        this.date = date;
+        this.heure = heure;
+        this.objet = objet;
+
     }
 
     public LocalDate getDate() {

@@ -1,40 +1,37 @@
 package Controllers;
 
 import Models.GestionPatient.Patient;
+import Models.GestionPatient.PatientDaoImpl;
+import Models.GestionRdv.RdvDaoImpl;
 import Models.ViewModal;
-import com.jfoenix.controls.JFXButton;
-import com.sun.tools.javac.Main;
+import com.jfoenix.controls.*;
+
 import database.ConnectToDatabase;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 
-import javafx.fxml.FXMLLoader;
+
 import javafx.fxml.Initializable;
 
 
-import java.awt.event.ActionEvent;
-import java.io.IOException;
+
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.LocalTime;
+
 import java.util.ResourceBundle;
 import Models.GestionRdv.Rdv;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
+
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
 
-public class ListeRdvController implements Initializable {
+
+public class Controller implements Initializable {
 
     @FXML
     private TableView<ViewModal> Table;
@@ -63,10 +60,29 @@ public class ListeRdvController implements Initializable {
     @FXML
     private AnchorPane cible;
 
+    @FXML private JFXDatePicker date_rdv;
+    @FXML private JFXTimePicker heure_rdv;
+    @FXML private JFXTextArea obj_rdv;
+    @FXML private JFXTextField nom_rdv;
+    @FXML private JFXTextField tel_rdv;
+    @FXML private JFXTextField prenom_rdv;
+    @FXML private JFXTextField email_rdv;
+    @FXML private JFXTextArea info_rdv;
+    @FXML private JFXTextField adr_rdv;
+
+     @FXML private JFXButton ajoutRdv;
+
+    @FXML private JFXButton supBtn;
+    @FXML private JFXButton imprimBtn;
+    @FXML private JFXButton editBtn;
+
 
 
     ObservableList<ViewModal> rdvTableDate= FXCollections.observableArrayList();
 
+
+    PatientDaoImpl patientBDD= new PatientDaoImpl();
+    RdvDaoImpl rdvBdd =new RdvDaoImpl();
 
 
 
@@ -75,9 +91,11 @@ public class ListeRdvController implements Initializable {
 
         int i=0;
         try {
-            Connection conn= ConnectToDatabase.createConnection();
-            PreparedStatement statement= conn.prepareStatement("SELECT * FROM `rdv` JOIN `patient` WHERE objet =?");
             java.sql.Date today= new java.sql.Date(new java.util.Date().getTime());
+
+            Connection conn= ConnectToDatabase.createConnection();
+            PreparedStatement statement= conn.prepareStatement("SELECT * FROM `rdv` INNER JOIN `patient` WHERE objet =?");
+
             System.out.println(today);
             statement.setString(1,"objet");
             ResultSet rs =statement.executeQuery();
@@ -102,6 +120,25 @@ public class ListeRdvController implements Initializable {
 
             Table.setItems(rdvTableDate);
 
+            ajoutRdv.setOnAction(actionEvent -> {
+                Rdv rdv =new Rdv(date_rdv.getValue(), heure_rdv.getValue(), obj_rdv.getText());
+                Patient patient=new Patient(nom_rdv.getText(), prenom_rdv.getText(),adr_rdv.getText(),tel_rdv.getText(), email_rdv.getText(), info_rdv.getText());
+                patientBDD.createPatient(patient);
+                rdvBdd.createRdv(patient,rdv);
+                System.out.println(rdv.getObjet());
+                System.out.println(patient.getInfoMedicale());
+
+            });
+
+
+            supBtn.setOnAction(actionEvent -> {
+                ViewModal item = Table.getSelectionModel().getSelectedItem();
+                int id=Integer.parseInt(item.getId());
+                System.out.println(id);
+                rdvBdd.deleteRdv(id);
+
+            });
+
 
         }
         catch (SQLException e){
@@ -114,22 +151,12 @@ public class ListeRdvController implements Initializable {
 
 
 
+
     }
 
 
 
 
-    public void changeScreen(javafx.event.ActionEvent event) {
 
-        try {
-            Parent ajoutRdv= FXMLLoader.load(getClass().getResource("Views/AjouterRdv.fxml"));
-            Scene ajoutRdvScene= new Scene(ajoutRdv, 1000, 650);
-            Stage window= (Stage)((Node)event.getSource()).getScene().getWindow();
 
-            window.setScene(ajoutRdvScene);
-            window.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }
