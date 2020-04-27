@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 public class ConnectToDatabase {
 
     public static Connection createConnection() {
-<<<<<<< HEAD
+
         String dbUrl = "jdbc:mysql://localhost:3306/rdv";
         String DB_USER = "root";
         String DB_PASS = "";

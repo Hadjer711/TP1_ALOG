@@ -66,6 +66,20 @@
             <Font size="15.0" />
          </font>
       </JFXButton>
+      <Pane fx:id="modif" layoutX="639.0" layoutY="9.0" prefHeight="604.0" prefWidth="346.0" style="-fx-background-color: #009688;" visible="false">
+         <children>
+            <JFXDatePicker fx:id="datemodif" defaultColor="WHITE" layoutX="88.0" layoutY="236.0" prefHeight="28.0" prefWidth="200.0" promptText="Date" />
+            <JFXTimePicker fx:id="heuremodif" defaultColor="WHITE" layoutX="88.0" layoutY="275.0" prefHeight="55.0" prefWidth="200.0" promptText="Heure" />
+            <JFXTextField fx:id="objModif" focusColor="WHITE" layoutX="88.0" layoutY="368.0" prefHeight="43.0" prefWidth="171.0" promptText="Objet" unFocusColor="WHITE" />
+            <JFXButton fx:id="saveModif" buttonType="RAISED" layoutX="106.0" layoutY="451.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="135.0" style="-fx-background-color: white;" text="Enregistrer" />
+            <Label fx:id="labelModif" layoutX="26.0" layoutY="39.0" prefHeight="98.0" prefWidth="295.0" text="Modification du RDV" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <Label fx:id="idmodif" layoutX="472.0" layoutY="36.0" text="Label" visible="false" />
 
 
    </children>

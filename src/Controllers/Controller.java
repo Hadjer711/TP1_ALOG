@@ -3,6 +3,7 @@ package Controllers;
 import Models.GestionPatient.Patient;
 import Models.GestionPatient.PatientDaoImpl;
 import Models.GestionRdv.RdvDaoImpl;
+import Models.Impression;
 import Models.ViewModal;
 import com.jfoenix.controls.*;
 
@@ -17,18 +18,20 @@ import javafx.fxml.Initializable;
 
 
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import Models.GestionRdv.Rdv;
 
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 
 
 public class Controller implements Initializable {
@@ -70,11 +73,21 @@ public class Controller implements Initializable {
     @FXML private JFXTextArea info_rdv;
     @FXML private JFXTextField adr_rdv;
 
+    @FXML private Pane modif;
+
      @FXML private JFXButton ajoutRdv;
 
     @FXML private JFXButton supBtn;
     @FXML private JFXButton imprimBtn;
     @FXML private JFXButton editBtn;
+
+    @FXML private JFXButton saveModif;
+    @FXML private JFXTextField objModif;
+    @FXML private JFXDatePicker datemodif;
+    @FXML private JFXTimePicker heuremodif;
+    @FXML private Label labelModif;
+    @FXML private Label idmodif;
+
 
 
 
@@ -83,50 +96,29 @@ public class Controller implements Initializable {
 
     PatientDaoImpl patientBDD= new PatientDaoImpl();
     RdvDaoImpl rdvBdd =new RdvDaoImpl();
-
-
+    ArrayList rdvListe= new ArrayList<Rdv>();
+    ArrayList patientListe= new ArrayList<Patient>();
+    Rdv rdv;
+    Patient patient;
+    Impression impression= new Impression();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        int i=0;
-        try {
+
+
             java.sql.Date today= new java.sql.Date(new java.util.Date().getTime());
 
-            Connection conn= ConnectToDatabase.createConnection();
-            PreparedStatement statement= conn.prepareStatement("SELECT * FROM `rdv` INNER JOIN `patient` WHERE objet =?");
-
-            System.out.println(today);
-            statement.setString(1,"objet");
-            ResultSet rs =statement.executeQuery();
-
-
-            while (rs.next()){
-
-                rdvTableDate.add(new ViewModal(Integer.toString(i), rs.getString("nom"), rs.getString("prenom"), rs.getTime("heure").toString(), rs.getString("objet"), rs.getString("infoMedicale")));
-                System.out.println(rdvTableDate.get(i).getId());
-                i++;
-            }
-
-
-            id_col.setCellValueFactory(new PropertyValueFactory<>("Id"));
-            nom_col.setCellValueFactory(new PropertyValueFactory<>("Nom"));
-            prenom_col.setCellValueFactory(new PropertyValueFactory<>("Prenom"));
-            heure_col.setCellValueFactory(new PropertyValueFactory<>("Heure"));
-            objet_col.setCellValueFactory(new PropertyValueFactory<>("Objet"));
-            info_col.setCellValueFactory(new PropertyValueFactory<>("Info"));
-
-             Table.getColumns().setAll(id_col,nom_col,prenom_col,heure_col,objet_col,info_col);
-
-            Table.setItems(rdvTableDate);
+            initialiserTable();
 
             ajoutRdv.setOnAction(actionEvent -> {
                 Rdv rdv =new Rdv(date_rdv.getValue(), heure_rdv.getValue(), obj_rdv.getText());
                 Patient patient=new Patient(nom_rdv.getText(), prenom_rdv.getText(),adr_rdv.getText(),tel_rdv.getText(), email_rdv.getText(), info_rdv.getText());
                 patientBDD.createPatient(patient);
-                rdvBdd.createRdv(patient,rdv);
-                System.out.println(rdv.getObjet());
+                rdvBdd.createRdv(rdv, patient);
+                System.out.println(rdv);
                 System.out.println(patient.getInfoMedicale());
+                initialiserTable();
 
             });
 
@@ -136,21 +128,81 @@ public class Controller implements Initializable {
                 int id=Integer.parseInt(item.getId());
                 System.out.println(id);
                 rdvBdd.deleteRdv(id);
+                initialiserTable();
+
+            });
+
+            editBtn.setOnAction(actionEvent -> {
+                ViewModal item = Table.getSelectionModel().getSelectedItem();
+                int idmodif=Integer.parseInt(item.getId());
+                modif.setVisible(true);
+                labelModif.setText("Modification du RDV num"+ idmodif);
+
+
+            });
+
+            saveModif.setOnAction(actionEvent -> {
+                LocalTime newheure= heuremodif.getValue();
+                LocalDate newdate = datemodif.getValue();
+                String newobj =objModif.getText();
+                ViewModal item = Table.getSelectionModel().getSelectedItem();
+                int idmodif=Integer.parseInt(item.getId());
+                rdvBdd.changeDate(idmodif,newdate, newheure);
+                initialiserTable();
+                modif.setVisible(false);
+
+
+            });
+
+            imprimBtn.setOnAction(actionEvent -> {
+                ViewModal item = Table.getSelectionModel().getSelectedItem();
+                int idimprm=Integer.parseInt(item.getId());
+                impression.imprimerRdv(idimprm);
 
             });
 
 
+
+
+
+
+
+
+
+
+
+    }
+
+    public void initialiserTable(){
+        Table.getItems().clear();
+        int i=0;
+        Connection conn= ConnectToDatabase.createConnection();
+        PreparedStatement statement= null;
+        try {
+            statement = conn.prepareStatement("SELECT * FROM `rdv` LEFT OUTER JOIN `patient` ON patient.id=rdv.patientId");
+
+        ResultSet rs =statement.executeQuery();
+        while (rs.next()){
+
+            rdvTableDate.add(new ViewModal(Integer.toString(rs.getInt("id")), rs.getString("nom"), rs.getString("prenom"), rs.getTime("heure").toString(), rs.getString("objet"), rs.getString("infoMedicale")));
+            System.out.println(rdvTableDate.get(i).getId());
+            i++;
         }
-        catch (SQLException e){
+
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
+        id_col.setCellValueFactory(new PropertyValueFactory<>("Id"));
+        nom_col.setCellValueFactory(new PropertyValueFactory<>("Nom"));
+        prenom_col.setCellValueFactory(new PropertyValueFactory<>("Prenom"));
+        heure_col.setCellValueFactory(new PropertyValueFactory<>("Heure"));
+        objet_col.setCellValueFactory(new PropertyValueFactory<>("Objet"));
+        info_col.setCellValueFactory(new PropertyValueFactory<>("Info"));
 
+        Table.getColumns().setAll(id_col,nom_col,prenom_col,heure_col,objet_col,info_col);
 
-
-
-
-
+        Table.setItems(rdvTableDate);
 
     }
 

@@ -1,10 +1,11 @@
 package Models.GestionRdv;
 
 import Models.GestionPatient.Patient;
-import Models.GestionPatient.PatientDaoImpl;
 import database.ConnectToDatabase;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,8 +23,8 @@ public class RdvDaoImpl implements RdvDao {
     public void createRdv(Rdv rdv,Patient patient) {
         try (PreparedStatement pstmt = conn.prepareStatement(SQL_CREATE_RDV, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setInt(1, patient.getPatientId());
-            pstmt.setDate(2, rdv.getDate());
-            pstmt.setTime(3, rdv.getHeure());
+            pstmt.setDate(2, new java.sql.Date(rdv.getDate().getDayOfYear()));
+            pstmt.setTime(3,  new java.sql.Time(rdv.getHeure().getHour()));
             pstmt.setString(4, rdv.getObjet());
             pstmt.executeUpdate();
             try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
@@ -45,8 +46,8 @@ public class RdvDaoImpl implements RdvDao {
                 while (rs.next()) {
                     rdv.setRdvId(rs.getInt(1));
                     rdv.setPatientId(rs.getInt(2));
-                    rdv.setDate(rs.getDate(3));
-                    rdv.setHeure(rs.getTime(5));
+                    rdv.setDate(rs.getDate(3).toLocalDate());
+                    rdv.setHeure(rs.getTime(5).toLocalTime());
                     rdv.setObjet(rs.getString(4));
 
                 }
@@ -67,8 +68,8 @@ public class RdvDaoImpl implements RdvDao {
                     Rdv rdv = new Rdv();
                     rdv.setRdvId(rs.getInt(1));
                     rdv.setPatientId(patientId);
-                    rdv.setDate(rs.getDate(3));
-                    rdv.setHeure(rs.getTime(5));
+                    rdv.setDate(rs.getDate(3).toLocalDate());
+                    rdv.setHeure(rs.getTime(5).toLocalTime());
                     rdv.setObjet(rs.getString(4));
                     allRdvsPatient.add(rdv);
                 }
@@ -89,8 +90,8 @@ public class RdvDaoImpl implements RdvDao {
                     Rdv rdv = new Rdv();
                     rdv.setRdvId(rs.getInt(1));
                     rdv.setPatientId(rs.getInt(2));
-                    rdv.setDate(rs.getDate(3));
-                    rdv.setHeure(rs.getTime(5));
+                    rdv.setDate(rs.getDate(3).toLocalDate());
+                    rdv.setHeure(rs.getTime(5).toLocalTime());
                     rdv.setObjet(rs.getString(4));
                     allRdvsJour.add(rdv);
                 }
@@ -101,12 +102,14 @@ public class RdvDaoImpl implements RdvDao {
         return allRdvsJour;
     }
 
+
+
     @Override
     public void updateRdv(Rdv rdv) {
         try (PreparedStatement pstmt = conn.prepareStatement(SQL_UPDATE_RDV)) {
             pstmt.setInt(1, rdv.getPatientId());
-            pstmt.setDate(2, rdv.getDate());
-            pstmt.setTime(3, rdv.getHeure());
+            pstmt.setDate(2, new java.sql.Date(rdv.getDate().getDayOfYear()));
+            pstmt.setTime(3, new java.sql.Time(rdv.getHeure().getHour()));
             pstmt.setString(4, rdv.getObjet());
             pstmt.setInt(5, rdv.getRdvId());
             pstmt.executeUpdate();
@@ -115,8 +118,10 @@ public class RdvDaoImpl implements RdvDao {
         }
     }
 
+
+
     @Override
-    public void changeDate(int rdvId, Date jour, Time heure) {
+    public void changeDate(int rdvId, LocalDate jour, LocalTime heure) {
         Rdv rdv = getRdvById(rdvId);
         rdv.setDate(jour);
         rdv.setHeure(heure);

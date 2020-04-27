@@ -2,46 +2,25 @@ package Models.GestionRdv;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class Rdv {
-<<<<<<< HEAD
-    private int id;
+    private int rdvId;
     private LocalDate date;
     private LocalTime heure;
-    private String objet;
-    private Patient patient;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public Rdv(int id, LocalDate date, LocalTime heure, String objet, Patient patient) {
-        this.id = id;
-=======
-    private int rdvId;
-    private Date date;
-    private Time heure;
     private String objet;
     private int patientId;
 
     public Rdv(){
 
     }
-    public Rdv( Date date, Time heure, String objet, int patientId) {
->>>>>>> 7d16d5ca4e2beb081e0993f14167f0a829061b2c
+    public Rdv( LocalDate date, LocalTime heure, String objet, int patientId) {
         this.date = date;
         this.heure = heure;
         this.objet = objet;
         this.patientId= patientId;
     }
-
-<<<<<<< HEAD
-
-    private static ArrayList<Rdv> rdvs;
 
     public Rdv(LocalDate date, LocalTime heure, String objet) {
         this.date = date;
@@ -51,21 +30,18 @@ public class Rdv {
     }
 
     public LocalDate getDate() {
-=======
-    public Date getDate() {
->>>>>>> 7d16d5ca4e2beb081e0993f14167f0a829061b2c
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
-    public Time getHeure() {
+    public LocalTime getHeure() {
         return heure;
     }
 
-    public void setHeure(Time heure) {
+    public void setHeure(LocalTime heure) {
         this.heure = heure;
     }
 

@@ -1,0 +1,12 @@
+****Information RDV**** 
+Numero rdv:13
+Date :1970-01-01
+Heure :01:00
+Objet rdv:ho
+****Information Patient**** 
+Nom:Houichi
+Prénom:Yousra
+Email:gy_houichi@esi.dz
+Adresse:alger
+Téléphone:04433
+Informations Médicale:cons

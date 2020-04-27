@@ -3,7 +3,8 @@ package Models.GestionRdv;
 import Models.GestionPatient.Patient;
 
 import java.sql.Date;
-import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 public interface RdvDao {
@@ -12,6 +13,6 @@ public interface RdvDao {
     public ArrayList<Rdv> getAllRdvsPatient(int patientId);
     public ArrayList<Rdv> getAllRdvsJour(Date jour);
     public void updateRdv(Rdv rdv);
-    public void changeDate(int rdvId, Date jour, Time heure);
+    public void changeDate(int rdvId, LocalDate jour, LocalTime heure);
     public void deleteRdv(int rdvId);
 }
