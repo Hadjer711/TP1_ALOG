@@ -1,0 +1,12 @@
+****Information RDV**** 
+Numero rdv:19
+Date :2020-04-08
+Heure :16:47
+Objet rdv:test demo
+****Information Patient**** 
+Nom:nom
+Prénom:prenom
+Email:adr@demo.com
+Adresse:adr demo
+Téléphone:03344
+Informations Médicale:infodemo

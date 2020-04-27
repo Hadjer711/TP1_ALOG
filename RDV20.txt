@@ -1,0 +1,12 @@
+****Information RDV**** 
+Numero rdv:20
+Date :2020-04-30
+Heure :13:21
+Objet rdv:obj demo
+****Information Patient**** 
+Nom:houichi
+Prénom:yousra
+Email:demo@demo.com
+Adresse:alger
+Téléphone:077344
+Informations Médicale:info demo
