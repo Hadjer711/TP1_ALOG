@@ -23,8 +23,8 @@ public class RdvDaoImpl implements RdvDao {
     public void createRdv(Rdv rdv,Patient patient) {
         try (PreparedStatement pstmt = conn.prepareStatement(SQL_CREATE_RDV, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setInt(1, patient.getPatientId());
-            pstmt.setDate(2, new java.sql.Date(rdv.getDate().getDayOfYear()));
-            pstmt.setTime(3,  new java.sql.Time(rdv.getHeure().getHour()));
+            pstmt.setDate(2, Date.valueOf(rdv.getDate()));
+            pstmt.setTime(3,  Time.valueOf(rdv.getHeure()));
             pstmt.setString(4, rdv.getObjet());
             pstmt.executeUpdate();
             try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
@@ -81,10 +81,10 @@ public class RdvDaoImpl implements RdvDao {
     }
 
     @Override
-    public ArrayList<Rdv> getAllRdvsJour(Date jour) {
+    public ArrayList<Rdv> getAllRdvsJour(LocalDate jour) {
         ArrayList<Rdv> allRdvsJour = new ArrayList();
         try (PreparedStatement pstmt = conn.prepareStatement(SQL_GET_ALL_RDVS_JOUR)) {
-            pstmt.setDate(1, jour);
+            pstmt.setDate(1, Date.valueOf(jour));
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
                     Rdv rdv = new Rdv();
@@ -108,8 +108,8 @@ public class RdvDaoImpl implements RdvDao {
     public void updateRdv(Rdv rdv) {
         try (PreparedStatement pstmt = conn.prepareStatement(SQL_UPDATE_RDV)) {
             pstmt.setInt(1, rdv.getPatientId());
-            pstmt.setDate(2, new java.sql.Date(rdv.getDate().getDayOfYear()));
-            pstmt.setTime(3, new java.sql.Time(rdv.getHeure().getHour()));
+            pstmt.setDate(2, Date.valueOf(rdv.getDate()));
+            pstmt.setTime(3, Time.valueOf(rdv.getHeure()));
             pstmt.setString(4, rdv.getObjet());
             pstmt.setInt(5, rdv.getRdvId());
             pstmt.executeUpdate();
